@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.Base64Utils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -38,9 +39,12 @@ public class WaterOrderControllerTest {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private static final String USER_PASSWORD = "admin:password";
+
     @Test
     public void getAllOrderTest() throws Exception {
         mockMvc.perform(get("/api/water-order")
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(USER_PASSWORD.getBytes()))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
 
@@ -50,6 +54,7 @@ public class WaterOrderControllerTest {
     public void getOrderTest() throws Exception {
         when(waterOrderService.findById(1L)).thenReturn(Optional.of(WaterOrder.builder().orderId(1L).build()));
         mockMvc.perform(get("/api/water-order/1")
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(USER_PASSWORD.getBytes()))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
         verify(waterOrderService, times(1)).findById(1L);
@@ -65,6 +70,7 @@ public class WaterOrderControllerTest {
         String valueAsString = objectMapper.writeValueAsString(waterOrderRequest);
 
         mockMvc.perform(post("/api/water-order")
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(USER_PASSWORD.getBytes()))
                 .content(valueAsString)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
@@ -75,6 +81,7 @@ public class WaterOrderControllerTest {
     public void cancelOrder() throws Exception {
         when(waterOrderService.cancelOrder(1L)).thenReturn(OrderResponse.builder().body(WaterOrder.builder().orderId(1L).build()).build());
         mockMvc.perform(put("/api/water-order/1")
+                .header(HttpHeaders.AUTHORIZATION, "Basic " + Base64Utils.encodeToString(USER_PASSWORD.getBytes()))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
         verify(waterOrderService, times(1)).cancelOrder(1L);
