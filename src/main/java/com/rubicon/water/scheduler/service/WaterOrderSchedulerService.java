@@ -72,7 +72,7 @@ public class WaterOrderSchedulerService {
 
         scheduleStopJob(data, dataMap);
 
-        LOGGER.info("Water order {} Scheduled from {} to {}", data.getOrderId(), data.getStartTime(), data.getStartTime().plusMinutes(data.getDurationInHours()));
+        LOGGER.info("Water order {} Scheduled from {} to {}", data.getOrderId(), data.getStartTime(), data.getStartTime().plusHours(data.getDurationInHours()));
     }
 
     private void scheduleStartJob(JobData data, JobDataMap dataMap) throws SchedulerException {
@@ -83,7 +83,7 @@ public class WaterOrderSchedulerService {
 
     private void scheduleStopJob(JobData data, JobDataMap dataMap) throws SchedulerException {
         dataMap.put(OrderConstants.JOB_TYPE, JobType.STOP);
-        ZonedDateTime stopZonedDateTime = ZonedDateTime.of(data.getStartTime().plusMinutes(data.getDurationInHours()), ZoneId.of("Asia/Kolkata"));
+        ZonedDateTime stopZonedDateTime = ZonedDateTime.of(data.getStartTime().plusHours(data.getDurationInHours()), ZoneId.of("Asia/Kolkata"));
         scheduleJob(data, data.getJobName().concat(JobType.STOP.name()), data.getJobGroup(), stopZonedDateTime, dataMap, WaterOrderStopJob.class);
     }
 

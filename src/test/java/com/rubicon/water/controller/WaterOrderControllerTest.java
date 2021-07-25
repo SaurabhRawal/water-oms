@@ -60,7 +60,7 @@ public class WaterOrderControllerTest {
     public void createOrderTest() throws Exception {
         LocalDateTime localDateTime = LocalDateTime.now();
 
-        WaterOrderRequest waterOrderRequest = WaterOrderRequest.builder().startDateTime(localDateTime.plusMinutes(5)).farmId("123").durationInHours(1L).build();
+        WaterOrderRequest waterOrderRequest = WaterOrderRequest.builder().startDateTime(localDateTime.plusHours(5)).farmId("123").durationInHours(1L).build();
         objectMapper.registerModule(new JavaTimeModule());
         String valueAsString = objectMapper.writeValueAsString(waterOrderRequest);
 

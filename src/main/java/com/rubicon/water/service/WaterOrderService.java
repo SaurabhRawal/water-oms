@@ -82,7 +82,7 @@ public class WaterOrderService implements IWaterOrderService {
 
         if (!listOfWaterOrders.isEmpty()) {
             filteredList = listOfWaterOrders.stream().filter(wo -> waterOrderRequest.getStartDateTime().isAfter(wo.getStartDateTime()) &&
-                    waterOrderRequest.getStartDateTime().isBefore(wo.getStartDateTime().plusMinutes(wo.getDurationInHours())) ||
+                    waterOrderRequest.getStartDateTime().isBefore(wo.getStartDateTime().plusHours(wo.getDurationInHours())) ||
                     waterOrderRequest.getStartDateTime().equals(wo.getStartDateTime())).collect(Collectors.toList());
         }
 
